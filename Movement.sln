@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.Api", "Api\Movemen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.Application", "Application\Movement.Application.csproj", "{DB8555EB-8E08-42EC-9770-90277AF5DBAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.BackgroundServices", "BackgroundServices\Movement.BackgroundServices.csproj", "{EB8C2201-603C-4CCA-98E6-05F1CB9AEE3A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.Contracts", "Contracts\Movement.Contracts.csproj", "{002E4F2B-724A-44EF-BAF0-96A4FFF55065}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.Domain", "Domain\Movement.Domain.csproj", "{9DD2FE28-C789-412F-8086-267F98498DE5}"
@@ -26,9 +24,6 @@ Global
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{395662BD-AE39-44C9-B2D9-B142DCA1876A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{395662BD-AE39-44C9-B2D9-B142DCA1876A}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -38,10 +33,6 @@ Global
 		{DB8555EB-8E08-42EC-9770-90277AF5DBAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB8555EB-8E08-42EC-9770-90277AF5DBAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB8555EB-8E08-42EC-9770-90277AF5DBAB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB8C2201-603C-4CCA-98E6-05F1CB9AEE3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB8C2201-603C-4CCA-98E6-05F1CB9AEE3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB8C2201-603C-4CCA-98E6-05F1CB9AEE3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB8C2201-603C-4CCA-98E6-05F1CB9AEE3A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{002E4F2B-724A-44EF-BAF0-96A4FFF55065}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{002E4F2B-724A-44EF-BAF0-96A4FFF55065}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{002E4F2B-724A-44EF-BAF0-96A4FFF55065}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,5 +57,8 @@ Global
 		{4B5D6C91-BC32-4667-8F18-47027CA4FAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B5D6C91-BC32-4667-8F18-47027CA4FAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B5D6C91-BC32-4667-8F18-47027CA4FAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
