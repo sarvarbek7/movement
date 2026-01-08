@@ -60,8 +60,6 @@ public static class DependencyInjection
 
             options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
         });
-        
-        services.AddSingleton<I18nService>();
 
         return services;
     }

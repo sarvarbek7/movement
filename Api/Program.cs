@@ -18,6 +18,4 @@ app.UseHttpsRedirection();
 
 app.UseRequestLocalization();
 
-app.MapGet("/", ([FromServices] I18nService i18n) => $"Error: {i18n.GetError("SampleError")}, Message: {i18n.GetMessage("SampleMessage")}");
-
 app.Run();
