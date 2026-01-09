@@ -25,10 +25,10 @@ jobs:
           cache: true
 
       - name: Restore dependencies
-        run: dotnet restore ./YourSolution.sln
+        run: dotnet restore ./Movement.sln
 
       - name: Build
-        run: dotnet build ./YourSolution.sln -c Release --no-restore /warnaserror
+        run: dotnet build ./Movement.sln -c Release --no-restore /warnaserror
 
       - name: Test
-        run: dotnet test ./YourSolution.sln -c Release --no-build --verbosity minimal
+        run: dotnet test ./Movement.sln -c Release --no-build --verbosity minimal
