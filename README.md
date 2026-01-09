@@ -24,4 +24,4 @@
 1. [Virtual office tizimi](https://cabinet.dasuty.com)
     - Xodimlar ish joylari va ular biriktirilgan rollar haqida ma'lumot olib kelish uchun http methodlardan foydalaniladi. Du46 jurnalidagi o'zgarishlar RabbitMQ broker orqali ma'lumot almashinadi.
 2. [Yagona darcha enakl tizimi](https://e-nakl.railway.uz)
-    - Enakl tizimining Texkontra moduli orqali Du1 yaratilgandandan so'ng Du2 uchun ma'lumotlar shakllanadi. 2la tizimda ham sostav ustida amallar qilsa bo'ladi va http endpointlar orqali ma'lumotlar bir xilligi ta'minlanadi.
+    - Enakl tizimining Texkontra moduli orqali Du1 yaratilgandandan so'ng Du2 uchun ma'lumotlar shakllanadi. 2la tizimda ham sostav ustida amallar qilsa bo'ladi va http endpointlar orqali ma'lumotlar bir xilligi ta'minlanadi.# contacts-back
