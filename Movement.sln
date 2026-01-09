@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.Mappings", "Mappin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.BackgroundServices", "BackgroundServices\Movement.BackgroundServices.csproj", "{28AC5C07-CC18-483F-9702-A5BDFF7E6060}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Movement.UnitTests", "UnitTests\Movement.UnitTests.csproj", "{2E8AC90B-F915-4908-950D-A8E141CCE72B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{28AC5C07-CC18-483F-9702-A5BDFF7E6060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28AC5C07-CC18-483F-9702-A5BDFF7E6060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28AC5C07-CC18-483F-9702-A5BDFF7E6060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E8AC90B-F915-4908-950D-A8E141CCE72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E8AC90B-F915-4908-950D-A8E141CCE72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E8AC90B-F915-4908-950D-A8E141CCE72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E8AC90B-F915-4908-950D-A8E141CCE72B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
