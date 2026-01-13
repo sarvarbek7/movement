@@ -1,4 +1,6 @@
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
+using Movement.IntegrationsGateway.Data;
 using Movement.IntegrationsGateway.Endpoints;
 using Movement.MessagingContracts.Buses;
 using Shared.Interfaces;
@@ -64,7 +66,18 @@ builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
         cfg.ConfigureEndpoints(context);
     });
 
+    x.AddEntityFrameworkOutbox<IntegrationsGatewayDbContext>(o =>
+    {
+        o.UsePostgres();
+    });
+
     x.SetKebabCaseEndpointNameFormatter();
+});
+
+builder.Services.AddDbContext<IntegrationsGatewayDbContext>(options =>
+{
+    options.UseNpgsql(configuration.GetConnectionString("Default"));
+    options.UseSnakeCaseNamingConvention();
 });
 
 var app = builder.Build();
