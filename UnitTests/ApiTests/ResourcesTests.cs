@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Runtime.InteropServices;
 using Movement.Api.Resources;
 
 namespace Movement.UnitTests.ApiTests;

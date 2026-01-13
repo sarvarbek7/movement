@@ -57,8 +57,8 @@ public abstract class TimeRange<T> where T : struct, IComparable<T>
         var otherStart = other.Start;
         var otherEnd = other.End;
 
-        bool thisStartsBeforeOtherEnds = !thisEnd.HasValue || !otherStart.HasValue || thisEnd.Value.CompareTo(otherStart.Value) >= 0;
-        bool thisEndsAfterOtherStarts = !thisStart.HasValue || !otherEnd.HasValue || thisStart.Value.CompareTo(otherEnd.Value) <= 0;
+        bool thisStartsBeforeOtherEnds = !thisEnd.HasValue || !otherStart.HasValue || thisEnd.Value.CompareTo(otherStart.Value) > 0;
+        bool thisEndsAfterOtherStarts = !thisStart.HasValue || !otherEnd.HasValue || thisStart.Value.CompareTo(otherEnd.Value) < 0;
 
         return thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts;
     }
