@@ -22,6 +22,9 @@ mono_crash.*
 # appsettings.json environment-specific files
 appsettings.*.json
 
+# OpenAPI/Swagger generated files
+*.openapi.json
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

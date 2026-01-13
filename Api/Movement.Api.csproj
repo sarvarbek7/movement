@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.7" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
   </ItemGroup>
 
@@ -16,6 +17,7 @@
     <ProjectReference Include="../Contracts/Movement.Contracts.csproj" />
     <ProjectReference Include="../Domain/Movement.Domain.csproj" />
     <ProjectReference Include="../Mappings/Movement.Mappings.csproj" />
+    <ProjectReference Include="../MessagingContracts/Movement.MessagingContracts.csproj" />
     <ProjectReference Include="../Shared/Shared.csproj" />
   </ItemGroup>
 

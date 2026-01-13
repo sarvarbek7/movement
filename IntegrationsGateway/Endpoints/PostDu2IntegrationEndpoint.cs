@@ -1,8 +1,7 @@
-using System.Text;
-using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Movement.IntegrationsGateway.Requests;
+using Movement.MessagingContracts.Buses;
 using RabbitMQ.Client;
 
 namespace Movement.IntegrationsGateway.Endpoints;
@@ -18,37 +17,17 @@ public static class PostDu2IntegrationEndpoint
     }
 
     private static async Task<Results<NoContent, ProblemHttpResult>> PostDu2TimeIntegrationHandler([FromBody] PostDu2Integration request,
-                                                                                                   RabbitMqConnectionManager rabbitMqConnectionManager,
+                                                                                                   IEnaklIntegrationBus bus,
                                                                                                    ILogger<PostDu2Integration> logger,
                                                                                                    CancellationToken cancellationToken)
     {
         try
         {
-            IConnection connection = await rabbitMqConnectionManager.GetConnectionAsync("movement_backend",
-                cancellationToken);
+            var postDu2Event = request.ToEvent();
 
-            IChannel channel = await connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            await bus.Publish(postDu2Event, cancellationToken);
 
-            var basicProperties = new BasicProperties()
-            {
-                ContentType = "application/json",
-                Persistent = true,
-                ContentEncoding = "UTF-8"
-            };
-
-
-            string jsonText = JsonSerializer.Serialize(request);
-            ReadOnlyMemory<byte> body = Encoding.UTF8.GetBytes(jsonText);
-
-            await channel.BasicPublishAsync("amq.direct",
-                                            ROUTING_KEY,
-                                            mandatory: true,
-                                            basicProperties,
-                                            body,
-                                            cancellationToken);
-
-            await channel.CloseAsync(cancellationToken);
-            await channel.DisposeAsync();
+            logger.LogInformation("Published PostDu2IntegionEvent: {@event}", postDu2Event);
 
             return TypedResults.NoContent();
         }
