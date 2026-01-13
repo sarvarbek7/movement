@@ -69,6 +69,8 @@ builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
     x.AddEntityFrameworkOutbox<IntegrationsGatewayDbContext>(o =>
     {
         o.UsePostgres();
+        o.QueryDelay = TimeSpan.FromMinutes(1);
+        o.QueryMessageLimit = 1000;
     });
 
     x.SetKebabCaseEndpointNameFormatter();
