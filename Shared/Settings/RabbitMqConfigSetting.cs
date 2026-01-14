@@ -2,31 +2,31 @@ using Shared.Interfaces;
 
 namespace Shared.Settings;
 
-public record RabbitMqConfigSetting : IHostPortUsernamePassword
+public class RabbitMqConfigSetting : IHostPortUsernamePassword
 {
     /// <summary>
     /// The RabbitMQ host address. Default is "localhost"
     /// </summary>
-    public string Host  {get; init;} = "localhost";
+    public string Host  {get; set;} = "localhost";
 
     /// <summary>
     /// The RabbitMQ virtual host. Default is "/"
     /// </summary>
-    public string VirtualHost { get; init; } = "/";
+    public string VHost { get; set; } = "/";
 
     /// <summary>
     /// The RabbitMQ port. Default is 5672
     /// </summary>
-    public short Port  {get; init;} = 5672;
+    public short Port  {get; set;} = 5672;
 
     /// <summary>
     /// The RabbitMQ username. Default is "guest"
     /// </summary>
-    public string Username  {get; init;} = "guest";
+    public string Username  {get; set;} = "guest";
 
 
     /// <summary>
     /// The RabbitMQ password. Default is "guest"
     /// </summary>
-    public string Password  {get; init;} = "guest";
+    public string Password  {get; set;} = "guest";
 }

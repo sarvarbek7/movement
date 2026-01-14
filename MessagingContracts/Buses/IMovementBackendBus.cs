@@ -2,4 +2,4 @@ using MassTransit;
 
 namespace Movement.MessagingContracts.Buses;
 
-public interface IEnaklIntegrationBus : IBus;
+public interface IMovementBackendBus : IBus;

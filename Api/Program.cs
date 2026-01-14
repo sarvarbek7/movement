@@ -12,9 +12,9 @@ builder.Services.AddApi();
 
 const string MQSettingsKey = "MQSettings";
 
-builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
+builder.Services.AddMassTransit<IMovementBackendBus>(x =>
 {
-    const string busKey = nameof(IEnaklIntegrationBus);
+    const string busKey = nameof(IMovementBackendBus);
     const string mqSettingsSectionKey = $"{MQSettingsKey}:{busKey}";
 
     var rabbitMqSettings = new RabbitMqConfigSetting();
@@ -22,7 +22,7 @@ builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost,
+        cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VHost,
                  h =>
                  {
                      h.Username(rabbitMqSettings.Username);
@@ -36,7 +36,29 @@ builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
 
     // Register Consumers
     x.AddConsumer<PostDu2Consumer>();
+});
 
+builder.Services.AddMassTransit<ICommunicationDefaultBus>(x =>
+{
+    const string busKey = nameof(ICommunicationDefaultBus);
+    const string mqSettingsSectionKey = $"{MQSettingsKey}:{busKey}";
+
+    var rabbitMqSettings = new RabbitMqConfigSetting();
+    configuration.GetSection(mqSettingsSectionKey).Bind(rabbitMqSettings);
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VHost,
+                 h =>
+                 {
+                     h.Username(rabbitMqSettings.Username);
+                     h.Password(rabbitMqSettings.Password);
+                 });
+
+        cfg.ConfigureEndpoints(context);
+    });
+
+    x.SetKebabCaseEndpointNameFormatter();
 });
 
 

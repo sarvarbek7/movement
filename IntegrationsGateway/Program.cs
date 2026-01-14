@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Movement.IntegrationsGateway.Data;
@@ -46,17 +47,19 @@ if (builder.Environment.IsStaging())
 
 const string MQSettingsKey = "MQSettings";
 
-builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
+builder.Services.AddMassTransit<IMovementBackendBus>(x =>
 {
-    const string busKey = nameof(IEnaklIntegrationBus);
+    const string busKey = nameof(IMovementBackendBus);
     const string mqSettingsSectionKey = $"{MQSettingsKey}:{busKey}";
 
     var rabbitMqSettings = new RabbitMqConfigSetting();
-    configuration.GetSection(mqSettingsSectionKey).Bind(rabbitMqSettings);
+    var settings = configuration.GetSection(mqSettingsSectionKey);
+
+    settings.Bind(rabbitMqSettings);
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VirtualHost,
+        cfg.Host(rabbitMqSettings.Host, rabbitMqSettings.VHost,
                  h =>
                  {
                      h.Username(rabbitMqSettings.Username);
@@ -64,13 +67,9 @@ builder.Services.AddMassTransit<IEnaklIntegrationBus>(x =>
                  });
 
         cfg.ConfigureEndpoints(context);
-    });
-
-    x.AddEntityFrameworkOutbox<IntegrationsGatewayDbContext>(o =>
-    {
-        o.UsePostgres();
-        o.QueryDelay = TimeSpan.FromMinutes(1);
-        o.QueryMessageLimit = 1000;
+        cfg.UseTimeout(c => {
+            c.Timeout = TimeSpan.FromSeconds(30);
+        });
     });
 
     x.SetKebabCaseEndpointNameFormatter();

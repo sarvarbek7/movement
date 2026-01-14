@@ -1,3 +1,5 @@
+using MassTransit;
+using MassTransit.DependencyInjection;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Movement.IntegrationsGateway.Requests;
@@ -17,7 +19,7 @@ public static class PostDu2IntegrationEndpoint
     }
 
     private static async Task<Results<NoContent, ProblemHttpResult>> PostDu2TimeIntegrationHandler([FromBody] PostDu2Integration request,
-                                                                                                   IEnaklIntegrationBus bus,
+                                                                                                   Bind<IMovementBackendBus, IPublishEndpoint> bus,
                                                                                                    ILogger<PostDu2Integration> logger,
                                                                                                    CancellationToken cancellationToken)
     {
@@ -25,7 +27,7 @@ public static class PostDu2IntegrationEndpoint
         {
             var postDu2Event = request.ToEvent();
 
-            await bus.Publish(postDu2Event, cancellationToken);
+            await bus.Value.Publish(postDu2Event, cancellationToken);
 
             logger.LogInformation("Published PostDu2IntegionEvent: {@event}", postDu2Event);
 
