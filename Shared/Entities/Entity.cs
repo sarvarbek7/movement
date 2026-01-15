@@ -3,12 +3,13 @@ using Shared.Events;
 namespace Shared.Entities;
 
 public abstract class Entity<TId, TAudit, TAuditId> : IEntity<TId>,
+                                                      IHasDomainEvent,
                                                       ISoftDeleted,
                                                       ICreatedAudit<TAudit, TAuditId>,
                                                       IUpdatedAudit<TAudit, TAuditId>,
                                                       IDeletedAudit<TAudit, TAuditId>
     where TId : struct, IEquatable<TId>
-    where TAudit : IEntity<TAuditId>
+    where TAudit : class, IEntity<TAuditId>
     where TAuditId : struct, IEquatable<TAuditId>
 {
     private readonly List<DomainEvent> _domainEvents = [];
@@ -36,6 +37,11 @@ public abstract class Entity<TId, TAudit, TAuditId> : IEntity<TId>,
         _domainEvents.Add(@event);
     }
 
+    public void AddDomainEvents(IEnumerable<DomainEvent> events)
+    {
+        _domainEvents.AddRange(events);
+    }
+
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
@@ -51,15 +57,30 @@ public abstract class Entity<TId, TAudit, TAuditId> : IEntity<TId>,
         return _domainEvents.AsReadOnly();
     }
 
+    public void RemoveDomainEvent(DomainEvent @event)
+    {
+        _domainEvents.Remove(@event);
+    }
+
+    public void RemoveDomainEvents(IEnumerable<DomainEvent> events)
+    {
+        foreach (var @event in events)
+        {
+            _domainEvents.Remove(@event);
+        }
+    }
+
     public void Restore()
     {
         IsDeleted = false;
         DeletedAt = null;
     }
 
-    public void SoftDelete()
+    public void SoftDelete(TAuditId deletedById, TAudit? deletedBy = null)
     {
         IsDeleted = true;
+        DeletedById = deletedById;
+        DeletedBy = deletedBy;
         DeletedAt = DateTimeOffset.UtcNow;
     }
 }

@@ -1,7 +1,7 @@
 namespace Shared.Entities;
 
 public interface IUpdatedAudit<TAudit, TAuditId>
-    where TAudit : IEntity<TAuditId>
+    where TAudit : class, IEntity<TAuditId>
     where TAuditId : struct, IEquatable<TAuditId>
 {
     TAuditId? UpdatedById { get; }
