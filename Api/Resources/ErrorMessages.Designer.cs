@@ -54,6 +54,16 @@ namespace Movement.Api.Resources
             }
         }
 
+        public static string GetMessage(string code, params object?[] args)
+        {
+            if (args == null || args.Length == 0)
+            {
+                return ResourceManager.GetString(code, resourceCulture) ?? string.Empty;
+            }
+
+            return string.Format(ResourceManager.GetString(code, resourceCulture) ?? string.Empty, args);
+        }
+
         public static string Test
         {
             get

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root"
+        xmlns=""
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -25,5 +28,15 @@
     <data name="TestWithPlaceholder" xml:space="preserve">
         <value>This is a test error message with a placeholder: {0}.</value>
         <comment>Used for testing purposes with a placeholder.</comment>
+    </data>
+
+    <data name="EOGOH_INVALID_KM_EXCEPTION" xml:space="preserve">
+        <value>The provided Km value {0} is invalid.</value>
+        <comment>Error message indicating that the provided Km value is invalid in the EOgoH domain.</comment>
+    </data>
+
+    <data name="EOGOH_INVALID_PICKET_EXCEPTION" xml:space="preserve">
+        <value>The provided Picket value {0} is invalid.</value>
+        <comment>Error message indicating that the provided Picket value is invalid in the EOgoH domain.</comment>
     </data>
 </root>

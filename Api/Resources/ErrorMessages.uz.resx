@@ -26,4 +26,14 @@
         <value>Bu to'ldiruvchi bilan test xatolik xabari: {0}.</value>
         <comment>To'ldiruvchi bilan sinov maqsadlarida ishlatiladi.</comment>
     </data>
+
+    <data name="EOGOH_INVALID_KM_EXCEPTION" xml:space="preserve">
+        <value>Berilgan Km qiymati {0} yaroqsiz.</value>
+        <comment>EOgoH domenida berilgan Km qiymati yaroqsiz ekanligini ko'rsatadigan xatolik xabari.</comment>
+    </data>
+
+    <data name="EOGOH_INVALID_PICKET_EXCEPTION" xml:space="preserve">
+        <value>Berilgan Picket qiymati {0} yaroqsiz.</value>
+        <comment>EOgoH domenida berilgan Picket qiymati yaroqsiz ekanligini ko'rsatadigan xatolik xabari.</comment>
+    </data>
 </root>

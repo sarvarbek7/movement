@@ -26,4 +26,14 @@
         <value>Это тестовое сообщение с заполнителем: {0}.</value>
         <comment>Используется для тестирования с заполнителем.</comment>
     </data>
+
+    <data name="EOGOH_INVALID_KM_EXCEPTION" xml:space="preserve">
+        <value>Предоставленное значение километра {0} недействительно.</value>
+        <comment>Сообщение об ошибке, указывающее, что предоставленное значение километра недействительно в домене EOgoH.</comment>
+    </data>
+
+    <data name="EOGOH_INVALID_PICKET_EXCEPTION" xml:space="preserve">
+        <value>Предоставленное значение пикета {0} недействительно.</value>
+        <comment>Сообщение об ошибке, указывающее, что предоставленное значение пикета недействительно в домене EOgoH.</comment>
+    </data>
 </root>
