@@ -6,6 +6,7 @@ public abstract class TimeRange<T> where T : struct, IComparable<T>
 {
     protected TimeRange(T? start, T? end)
     {
+        // Allow nulls (incomplete), but if both exist they must be ordered.
         if (start.HasValue && end.HasValue && end.Value.CompareTo(start.Value) < 0)
             throw new TimeRangeInvalidException();
 
@@ -16,59 +17,103 @@ public abstract class TimeRange<T> where T : struct, IComparable<T>
     public T? Start { get; }
     public T? End { get; }
 
+    /// <summary>
+    /// True only when both Start and End are set.
+    /// </summary>
+    public bool IsComplete => Start.HasValue && End.HasValue;
+
     // Immutable "setters"
     public TimeRange<T> WithStart(T? start) => Create(start, End);
     public TimeRange<T> WithEnd(T? end) => Create(Start, end);
 
-    // Check if value is inside the range
-    public bool Contains(T other)
+    // -----------------------------
+    // Try Methods (null = incomplete)
+    // -----------------------------
+
+    /// <summary>
+    /// Tries to check whether value is inside the range.
+    /// Half-open: [Start, End)
+    /// Returns false if the range is incomplete.
+    /// </summary>
+    public bool TryContains(T value, out bool result)
     {
-        bool afterStart = !Start.HasValue || other.CompareTo(Start.Value) >= 0;
-        bool beforeEnd = !End.HasValue || other.CompareTo(End.Value) <= 0;
-        
-        return afterStart && beforeEnd;
+        if (!Start.HasValue || !End.HasValue)
+        {
+            result = default;
+            return false;
+        }
+
+        result = value.CompareTo(Start.Value) >= 0
+              && value.CompareTo(End.Value) < 0;
+
+        return true;
     }
+
+    /// <summary>
+    /// Tries to check whether this range fully contains another range.
+    /// Half-open semantics.
+    /// Returns false if either range is incomplete.
+    /// </summary>
+    public bool TryContains(TimeRange<T> other, out bool result)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+
+        if (!Start.HasValue || !End.HasValue || !other.Start.HasValue || !other.End.HasValue)
+        {
+            result = default;
+            return false;
+        }
+
+        // this.Start <= other.Start && other.End <= this.End
+        result = Start.Value.CompareTo(other.Start.Value) <= 0
+              && other.End.Value.CompareTo(End.Value) <= 0;
+
+        return true;
+    }
+
+    /// <summary>
+    /// Tries to check whether two ranges overlap.
+    /// Half-open: [Start, End) overlaps iff intersection length > 0.
+    /// Returns false if either range is incomplete.
+    /// </summary>
+    public bool TryOverlaps(TimeRange<T> other, out bool result)
+    {
+        ArgumentNullException.ThrowIfNull(other);
+
+        if (!Start.HasValue || !End.HasValue || !other.Start.HasValue || !other.End.HasValue)
+        {
+            result = default;
+            return false;
+        }
+
+        // Overlap iff this.Start < other.End AND other.Start < this.End
+        result = Start.Value.CompareTo(other.End.Value) < 0
+              && other.Start.Value.CompareTo(End.Value) < 0;
+
+        return true;
+    }
+
+    // -----------------------------
+    // Optional strict wrappers
+    // -----------------------------
+
+    public bool Contains(T value)
+        => TryContains(value, out var r) ? r
+         : throw new TimeRangeInvalidException(); // or IncompleteTimeRangeException
 
     public bool Contains(TimeRange<T> other)
-    {
-        ArgumentNullException.ThrowIfNull(other);
+        => TryContains(other, out var r) ? r
+         : throw new TimeRangeInvalidException();
 
-        var thisStart = Start;
-        var thisEnd = End;
-
-        var otherStart = other.Start;
-        var otherEnd = other.End;
-
-        bool startIsInside = !thisStart.HasValue || !otherStart.HasValue || thisStart.Value.CompareTo(otherStart.Value) <= 0;
-        bool endIsInside = !thisEnd.HasValue || !otherEnd.HasValue || thisEnd.Value.CompareTo(otherEnd.Value) >= 0;
-
-        return startIsInside && endIsInside;
-    }
-
-
-    // Check if two ranges overlap
     public bool Overlaps(TimeRange<T> other)
-    {
-        ArgumentNullException.ThrowIfNull(other);
-
-        var thisStart = Start;
-        var thisEnd = End;
-
-        var otherStart = other.Start;
-        var otherEnd = other.End;
-
-        bool thisStartsBeforeOtherEnds = !thisEnd.HasValue || !otherStart.HasValue || thisEnd.Value.CompareTo(otherStart.Value) > 0;
-        bool thisEndsAfterOtherStarts = !thisStart.HasValue || !otherEnd.HasValue || thisStart.Value.CompareTo(otherEnd.Value) < 0;
-
-        return thisStartsBeforeOtherEnds && thisEndsAfterOtherStarts;
-    }
+        => TryOverlaps(other, out var r) ? r
+         : throw new TimeRangeInvalidException();
 
     // Equality for value objects
     public override bool Equals(object? obj)
-    {
-        if (obj is not TimeRange<T> other) return false;
-        return Nullable.Equals(Start, other.Start) && Nullable.Equals(End, other.End);
-    }
+        => obj is TimeRange<T> other
+        && Nullable.Equals(Start, other.Start)
+        && Nullable.Equals(End, other.End);
 
     public override int GetHashCode() => HashCode.Combine(Start, End);
 
