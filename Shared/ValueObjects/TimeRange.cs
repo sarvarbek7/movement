@@ -7,7 +7,7 @@ public abstract class TimeRange<T> where T : struct, IComparable<T>
     protected TimeRange(T? start, T? end)
     {
         // Allow nulls (incomplete), but if both exist they must be ordered.
-        if (start.HasValue && end.HasValue && end.Value.CompareTo(start.Value) < 0)
+        if (start.HasValue && end.HasValue && end.Value.CompareTo(start.Value) <= 0)
             throw new TimeRangeInvalidException();
 
         Start = start;
@@ -26,88 +26,173 @@ public abstract class TimeRange<T> where T : struct, IComparable<T>
     public TimeRange<T> WithStart(T? start) => Create(start, End);
     public TimeRange<T> WithEnd(T? end) => Create(Start, end);
 
-    // -----------------------------
-    // Try Methods (null = incomplete)
-    // -----------------------------
-
-    /// <summary>
-    /// Tries to check whether value is inside the range.
-    /// Half-open: [Start, End)
-    /// Returns false if the range is incomplete.
-    /// </summary>
     public bool TryContains(T value, out bool result)
     {
-        if (!Start.HasValue || !End.HasValue)
+        result = false;
+
+        // If complete, it's decidable.
+        if (IsComplete)
         {
-            result = default;
-            return false;
+            var s = Start!.Value;
+            var e = End!.Value;
+
+            // [s, e): s <= value < e
+            result = Comparer<T>.Default.Compare(value, s) >= 0
+                  && Comparer<T>.Default.Compare(value, e) < 0;
+            return true;
         }
 
-        result = value.CompareTo(Start.Value) >= 0
-              && value.CompareTo(End.Value) < 0;
+        // If only Start exists:
+        if (Start.HasValue)
+        {
+            // If value < Start => definitely false. Otherwise unknown (End missing).
+            if (Comparer<T>.Default.Compare(value, Start.Value) < 0)
+            {
+                result = false;
+                return true;
+            }
 
-        return true;
+            return false; // could be in or out depending on End
+        }
+
+        // If only End exists:
+        if (End.HasValue)
+        {
+            // If value >= End => definitely false. Otherwise unknown (Start missing).
+            if (Comparer<T>.Default.Compare(value, End.Value) >= 0)
+            {
+                result = false;
+                return true;
+            }
+
+            return false; // could be in or out depending on Start
+        }
+
+        // No bounds => unknown.
+        return false;
     }
 
-    /// <summary>
-    /// Tries to check whether this range fully contains another range.
-    /// Half-open semantics.
-    /// Returns false if either range is incomplete.
-    /// </summary>
+
     public bool TryContains(TimeRange<T> other, out bool result)
     {
         ArgumentNullException.ThrowIfNull(other);
+        result = false;
 
-        if (!Start.HasValue || !End.HasValue || !other.Start.HasValue || !other.End.HasValue)
+        static int Cmp(T a, T b) => Comparer<T>.Default.Compare(a, b);
+
+        // Determinable TRUE/FALSE when both are complete.
+        // A contains B iff A.Start <= B.Start AND B.End <= A.End (half-open containment).
+        if (IsComplete && other.IsComplete)
         {
-            result = default;
-            return false;
+            var aS = Start!.Value;
+            var aE = End!.Value;
+            var bS = other.Start!.Value;
+            var bE = other.End!.Value;
+
+            result = Cmp(aS, bS) <= 0 && Cmp(bE, aE) <= 0;
+            return true;
         }
 
-        // this.Start <= other.Start && other.End <= this.End
-        result = Start.Value.CompareTo(other.Start.Value) <= 0
-              && other.End.Value.CompareTo(End.Value) <= 0;
+        // Determinable FALSE cases (proof by contradiction), even with incompleteness.
 
-        return true;
+        // If B.Start is known and it's before A.Start -> cannot be contained.
+        if (Start.HasValue && other.Start.HasValue && Cmp(other.Start.Value, Start.Value) < 0)
+            return true;
+
+        // If B.End is known and it's after A.End -> cannot be contained.
+        if (End.HasValue && other.End.HasValue && Cmp(other.End.Value, End.Value) > 0)
+            return true;
+
+        // If B.End <= A.Start, then B.Start < B.End <= A.Start => B.Start < A.Start -> cannot be contained.
+        // (Relies on non-empty intervals: Start < End.)
+        if (Start.HasValue && other.End.HasValue && Cmp(other.End.Value, Start.Value) <= 0)
+            return true;
+
+        // If B.Start >= A.End, then B.End > B.Start >= A.End => B.End > A.End -> cannot be contained.
+        // (Relies on non-empty intervals: Start < End.)
+        if (End.HasValue && other.Start.HasValue && Cmp(other.Start.Value, End.Value) >= 0)
+            return true;
+
+        // Otherwise: not enough information to decide.
+        return false;
     }
 
-    /// <summary>
-    /// Tries to check whether two ranges overlap.
-    /// Half-open: [Start, End) overlaps iff intersection length > 0.
-    /// Returns false if either range is incomplete.
-    /// </summary>
+
     public bool TryOverlaps(TimeRange<T> other, out bool result)
     {
         ArgumentNullException.ThrowIfNull(other);
+        result = false;
 
-        if (!Start.HasValue || !End.HasValue || !other.Start.HasValue || !other.End.HasValue)
+        static int Cmp(T a, T b) => Comparer<T>.Default.Compare(a, b);
+
+        bool InHalfOpen(T x, T s, T e) => Cmp(x, s) >= 0 && Cmp(x, e) < 0;   // [s, e)
+        bool InOpenClosed(T x, T s, T e) => Cmp(x, s) > 0 && Cmp(x, e) <= 0; // (s, e]
+
+        // 1) If both complete, it's fully decidable.
+        if (IsComplete && other.IsComplete)
         {
-            result = default;
-            return false;
+            var aS = Start!.Value;
+            var aE = End!.Value;
+            var bS = other.Start!.Value;
+            var bE = other.End!.Value;
+
+            // Overlap iff aS < bE AND bS < aE  (half-open)
+            result = Cmp(aS, bE) < 0 && Cmp(bS, aE) < 0;
+            return true;
         }
 
-        // Overlap iff this.Start < other.End AND other.Start < this.End
-        result = Start.Value.CompareTo(other.End.Value) < 0
-              && other.Start.Value.CompareTo(End.Value) < 0;
+        // 2) Certain "no overlap" from known separation (doesn't require completeness).
+        // If other starts at/after this ends => cannot overlap.
+        if (End.HasValue && other.Start.HasValue && Cmp(other.Start.Value, End.Value) >= 0)
+            return true;
 
-        return true;
+        // If this starts at/after other ends => cannot overlap.
+        if (Start.HasValue && other.End.HasValue && Cmp(Start.Value, other.End.Value) >= 0)
+            return true;
+
+        // 3) Certain "overlap" is only provable when one range is complete and we know
+        //    a boundary of the other lies inside it.
+        if (IsComplete)
+        {
+            var aS = Start!.Value;
+            var aE = End!.Value;
+
+            // other.Start inside [aS, aE) => overlap guaranteed (under End > Start assumption)
+            if (other.Start.HasValue && InHalfOpen(other.Start.Value, aS, aE))
+            {
+                result = true;
+                return true;
+            }
+
+            // other.End inside (aS, aE] => overlap guaranteed (under End > Start assumption)
+            if (other.End.HasValue && InOpenClosed(other.End.Value, aS, aE))
+            {
+                result = true;
+                return true;
+            }
+        }
+
+        if (other.IsComplete)
+        {
+            var bS = other.Start!.Value;
+            var bE = other.End!.Value;
+
+            if (Start.HasValue && InHalfOpen(Start.Value, bS, bE))
+            {
+                result = true;
+                return true;
+            }
+
+            if (End.HasValue && InOpenClosed(End.Value, bS, bE))
+            {
+                result = true;
+                return true;
+            }
+        }
+
+        // 4) Otherwise: not enough info.
+        return false;
     }
-
-    // -----------------------------
-    // Optional strict wrappers
-    // -----------------------------
-
-    public bool Contains(T value)
-        => TryContains(value, out var r) ? r
-         : throw new TimeRangeInvalidException(); // or IncompleteTimeRangeException
-
-    public bool Contains(TimeRange<T> other)
-        => TryContains(other, out var r) ? r
-         : throw new TimeRangeInvalidException();
-
-    public bool Overlaps(TimeRange<T> other)
-        => TryOverlaps(other, out var r) ? r
-         : throw new TimeRangeInvalidException();
 
     // Equality for value objects
     public override bool Equals(object? obj)
