@@ -1,5 +1,3 @@
-using System.Diagnostics.Contracts;
-
 namespace Movement.Domain.Common.Exceptions;
 
 public abstract class BaseException(string message = "Some unknown error has occurred",
