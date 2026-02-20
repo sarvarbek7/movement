@@ -3,12 +3,14 @@ using Movement.Api;
 using Movement.Api.Consumers;
 using Movement.MessagingContracts.Buses;
 using Shared.Settings;
+using Movement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
 builder.Services.AddApi();
+builder.Services.AddInfrastructure(configuration);
 
 const string MQSettingsKey = "MQSettings";
 

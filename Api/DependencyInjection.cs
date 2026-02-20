@@ -1,5 +1,6 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Movement.Application.Network.Apis.VirtualOffice;
 
 namespace Movement.Api;
 
@@ -13,15 +14,17 @@ public static class DependencyInjection
 
         services.AddLocalizationResources();
 
+        services.AddOptions();
+
         return services;
     }
 
     private static IServiceCollection AddLocalizationResources(this IServiceCollection services)
     {
-                services.AddLocalization((options) =>
-        {
-            options.ResourcesPath = "Resources";
-        });
+        services.AddLocalization((options) =>
+{
+    options.ResourcesPath = "Resources";
+});
 
         services.AddRequestLocalization((options) =>
         {
@@ -59,6 +62,13 @@ public static class DependencyInjection
 
             options.RequestCultureProviders.Add(new AcceptLanguageHeaderRequestCultureProvider());
         });
+
+        return services;
+    }
+
+    private static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<VirtualOfficeApiSettings>(configuration.GetSection(VirtualOfficeApiSettings.SectionName));
 
         return services;
     }

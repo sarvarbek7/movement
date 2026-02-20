@@ -19,6 +19,7 @@
     <ProjectReference Include="../Mappings/Movement.Mappings.csproj" />
     <ProjectReference Include="../MessagingContracts/Movement.MessagingContracts.csproj" />
     <ProjectReference Include="../Shared/Shared.csproj" />
+    <ProjectReference Include="..\Infrastructure\Movement.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
