@@ -9,8 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
-builder.Services.AddApi();
+builder.Services.AddApi(configuration);
 builder.Services.AddInfrastructure(configuration);
+builder.Services.AddControllers();
 
 const string MQSettingsKey = "MQSettings";
 
@@ -75,5 +76,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRequestLocalization();
+
+app.MapControllers();
 
 app.Run();

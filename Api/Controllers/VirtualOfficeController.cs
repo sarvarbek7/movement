@@ -4,7 +4,7 @@ using Movement.Application.Network.Apis.VirtualOffice;
 namespace Movement.Api.Controllers;
 
 [Controller]
-[Route("api/[controller]")]
+[Route("api/virtual-office")]
 public class VirtualOfficeController(IVirtualOfficeHttpService virtualOfficeHttpService) : ControllerBase
 {
     [HttpGet("user/{pinfl}")]

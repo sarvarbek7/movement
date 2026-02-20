@@ -6,15 +6,15 @@ namespace Movement.Api;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApi(this IServiceCollection services)
+    public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
     {
         // Add services to the container.
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         services.AddOpenApi();
 
         services.AddLocalizationResources();
+        services.AddMovementOptions(configuration);
 
-        services.AddOptions();
 
         return services;
     }
@@ -66,7 +66,7 @@ public static class DependencyInjection
         return services;
     }
 
-    private static IServiceCollection AddOptions(this IServiceCollection services, IConfiguration configuration)
+    private static IServiceCollection AddMovementOptions(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<VirtualOfficeApiSettings>(configuration.GetSection(VirtualOfficeApiSettings.SectionName));
 
