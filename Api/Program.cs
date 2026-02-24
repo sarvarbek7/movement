@@ -11,7 +11,6 @@ var configuration = builder.Configuration;
 
 builder.Services.AddApi(configuration);
 builder.Services.AddInfrastructure(configuration);
-builder.Services.AddControllers();
 
 const string MQSettingsKey = "MQSettings";
 
@@ -77,6 +76,6 @@ app.UseHttpsRedirection();
 
 app.UseRequestLocalization();
 
-app.MapControllers();
+app.MapEndpoints();
 
 app.Run();
