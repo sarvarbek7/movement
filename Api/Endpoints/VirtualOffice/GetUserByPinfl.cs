@@ -1,6 +1,8 @@
+using Mediator;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Movement.Application.Network.Apis.VirtualOffice;
 using Movement.Application.Network.Apis.VirtualOffice.Models;
+using Movement.Application.Test.Queries;
 
 namespace Movement.Api.Endpoints.VirtualOffice;
 
@@ -16,10 +18,12 @@ public static class GetUserByPinfl
 
     }
 
-    private static async Task<Results<Ok<User>, NotFound>> Handler(string pinfl, IVirtualOfficeHttpService virtualOfficeHttpService, CancellationToken cancellationToken)
+    private static async Task<Results<Ok<User>, NotFound>> Handler(string pinfl, IVirtualOfficeHttpService virtualOfficeHttpService, ISender sender, CancellationToken cancellationToken)
     {
         var result = await virtualOfficeHttpService.GetUserByPinfl(pinfl, cancellationToken);
-       
+
+        var testResult = await sender.Send(new TestQuery(pinfl), cancellationToken);
+
         return TypedResults.Ok(result);
     }
 }

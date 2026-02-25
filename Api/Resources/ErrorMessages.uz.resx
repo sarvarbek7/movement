@@ -36,4 +36,9 @@
         <value>Berilgan Picket qiymati {0} yaroqsiz.</value>
         <comment>EOgoH domenida berilgan Picket qiymati yaroqsiz ekanligini ko'rsatadigan xatolik xabari.</comment>
     </data>
+
+    <data name="USER_NOT_FOUND_BY_PINFL_EXCEPTION" xml:space="preserve">
+        <value>{0} pinfl bo'yicha foydalanuvchi topilmadi.</value>
+        <comment>Pinfl bo'yicha foydalanuvchi topilmaganligini ko'rsatadigan xatolik xabari.</comment>
+    </data>
 </root>

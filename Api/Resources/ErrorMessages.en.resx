@@ -39,4 +39,9 @@
         <value>The provided Picket value {0} is invalid.</value>
         <comment>Error message indicating that the provided Picket value is invalid in the EOgoH domain.</comment>
     </data>
+
+    <data name="USER_NOT_FOUND_BY_PINFL_EXCEPTION" xml:space="preserve">
+        <value>User with PINFL {0} not found.</value>
+        <comment>Error message indicating that a user with the given PINFL was not found.</comment>
+    </data>
 </root>

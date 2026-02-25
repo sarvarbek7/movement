@@ -36,4 +36,9 @@
         <value>Предоставленное значение пикета {0} недействительно.</value>
         <comment>Сообщение об ошибке, указывающее, что предоставленное значение пикета недействительно в домене EOgoH.</comment>
     </data>
+
+    <data name="USER_NOT_FOUND_BY_PINFL_EXCEPTION" xml:space="preserve">
+        <value>Пользователь с PINFL {0} не найден.</value>
+        <comment>Сообщение об ошибке, указывающее, что пользователь с данным PINFL не найден.</comment>
+    </data>
 </root>
