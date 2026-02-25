@@ -5,8 +5,10 @@ namespace Movement.Infrastructure.Test.QueryHandlers;
 
 public class TestQueryHandler : IQueryHandler<TestQuery, string>
 {
-    public ValueTask<string> Handle(TestQuery query, CancellationToken cancellationToken)
+    public async ValueTask<string> Handle(TestQuery query, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await Task.Yield(); // Simulate asynchronous work, such as database access or external API calls.
+
+        return query.Pinfl;
     }
 }
