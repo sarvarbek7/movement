@@ -22,12 +22,12 @@ public static class VirtualOfficeMapper
                                 parentId: virtualOfficeWorkplace.ParentId);
     }
 
-    public static Department MapToDepartment(this Network.Apis.VirtualOffice.Models.Department virtualOfficeDepartment)
+    public static Department MapToDepartment(this Network.Apis.VirtualOffice.Models.Department virtualOfficeDepartment, int workplaceId)
     {
         return Department.Create(externalId: virtualOfficeDepartment.Id,
                                  name: virtualOfficeDepartment.Name,
                                  level: virtualOfficeDepartment.Level,
                                  code: virtualOfficeDepartment.Code,
-                                 workplaceId: virtualOfficeDepartment.Workplace?.Id);
+                                 workplaceId: workplaceId);
     }
 }
