@@ -10,14 +10,20 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddRedaction();
+
         // Register infrastructure services, e.g., database context, repositories, etc.
         services.AddHttpClient<IVirtualOfficeHttpService, VirtualOfficeHttpService>("virtual-office-http-client", client =>
         {
             client.BaseAddress = new Uri(configuration["VirtualOfficeApiSettings:BaseUrl"]
                 ?? throw new InvalidOperationException("VirtualOfficeApiSettings:BaseUrl configuration is missing."));
         })
-        // .AddExtendedHttpClientLogging()
+        .AddExtendedHttpClientLogging(c =>
+        {
+            c.LogRequestStart = true;
+        })
         .AddStandardResilienceHandler();
+
 
         services.AddMediator(options =>
         {

@@ -4,6 +4,8 @@ namespace Movement.Domain.Users.Entities;
 
 public class Department : IEntity<int>, ISoftDeleted, IHasExternalId<int>
 {
+    private Department() { }
+
     public const string LStation = "station";
     public const string LDepartment = "department";
     public const string LCenter = "center";
@@ -16,4 +18,20 @@ public class Department : IEntity<int>, ISoftDeleted, IHasExternalId<int>
     public Workplace? Workplace { get; private set; }
     public int ExternalId { get; private set; }
     public bool IsDeleted { get; private set; }
+
+    public static Department Create(int externalId,
+                                    string name,
+                                    string level,
+                                    string? code,
+                                    int? workplaceId = null)
+    {
+        return new Department
+        {
+            ExternalId = externalId,
+            Name = name,
+            Level = level,
+            Code = code,
+            WorkplaceId = workplaceId
+        };
+    }
 }

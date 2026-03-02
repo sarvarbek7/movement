@@ -10,7 +10,6 @@ public class CheckPinfQueryBehaviour<TRequest, TResponse>() :
     public async ValueTask<TResponse> Handle(TRequest message, MessageHandlerDelegate<TRequest, TResponse> next, CancellationToken cancellationToken)
     {
         // TODO: Implement PINFL checking logic here, such as validating the PINFL format and retrieving the associated user from the database. If the user is not found, throw a UserNotFoundByPinflException.
-        Console.WriteLine($"Checking PINFL: {message.Pinfl}"); // Debug log for PINFL checking
 
         return await next(message, cancellationToken);
     }

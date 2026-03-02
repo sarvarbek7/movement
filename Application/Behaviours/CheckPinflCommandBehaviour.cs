@@ -11,8 +11,6 @@ public class CheckPinfCommandBehaviour<TRequest, TResponse>() :
     {
         // TODO: Implement PINFL checking logic here, such as validating the PINFL format and retrieving the associated user from the database. If the user is not found, throw a UserNotFoundByPinflException.
 
-        Console.WriteLine($"Checking PINFL: {message.Pinfl}"); // Debug log for PINFL checking
-
         return await next(message, cancellationToken);
     }
 }
