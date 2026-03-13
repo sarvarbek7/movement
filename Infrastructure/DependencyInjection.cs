@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Movement.Application.Network.Apis.VirtualOffice;
 using Movement.Infrastructure.Network.Apis.VirtualOffice;
 using Movement.Application.Behaviours;
+using Movement.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Movement.Infrastructure;
 
@@ -10,6 +12,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddDbContext<AppDbContext>(options =>
+        {
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+        });
+
         services.AddRedaction();
 
         // Register infrastructure services, e.g., database context, repositories, etc.
