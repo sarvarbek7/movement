@@ -3,12 +3,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Movement.Infrastructure.Data;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class MovementDbContext(DbContextOptions<MovementDbContext> options) : DbContext(options)
 {
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        ApplyConfigurations(modelBuilder);
     }
+
+    private static void ApplyConfigurations(ModelBuilder builder)
+  {
+    var currentAssembly = Assembly.GetAssembly(typeof (MovementDbContext))!;
+
+    builder.ApplyConfigurationsFromAssembly(currentAssembly);
+  }
 }
